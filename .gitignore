@@ -1,3 +1,4 @@
 api_auth_sanctum/
 react-guide/
 .vscode/
+*.txt
