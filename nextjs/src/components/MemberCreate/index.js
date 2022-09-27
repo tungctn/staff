@@ -29,7 +29,7 @@ const index = ({ role }) => {
     }, [])
 
     useEffect(() => {
-        if (role !== 'admin') {
+        if (role && role !== 'admin') {
             router.push('/403')
         }
     }, [role])

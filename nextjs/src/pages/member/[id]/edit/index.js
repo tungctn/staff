@@ -3,35 +3,45 @@ import MemberEdit from '../../../../components/MemberEdit'
 import { useRouter } from 'next/router'
 import { AppContext } from '../../../../context/AppContext'
 import { getCurrentUser, setAuthHeader } from '../../../../api/auth'
+import { useParams } from 'react-router-dom'
 
 const index = () => {
 
     const { user } = useContext(AppContext)
     const router = useRouter()
+    // const ids = useParams()
     const id = router.query.id
-    const [currentUser, setCurrentUser] = useState({})
     const getUser = async () => {
         if (localStorage['token']) {
             setAuthHeader(localStorage['token'])
             const response = await getCurrentUser()
-            setCurrentUser(response.data[0])
+            if (Number(id) !== response.data[0].id) {
+                router.push('/403')
+            }
         }
     }
 
-    useEffect(() => {
-        getUser()
-        console.log(currentUser);
-        console.log(isEdit);
-    }, [])
+    // useEffect(() => {
 
+    //     if (id && user && Number(id) !== user.id) {
+    //         // getUser()
+    //         console.log(user);
+    //         router.push('/403')
+    //     }
+    // }, [id, user])
     useEffect(() => {
-
-    })
-    const isEdit = currentUser.id - id
+        if (Object.values(user).length !== 0 && id) {
+            // console.log(user);
+            if (Number(id) !== user.id) {
+                router.push('/403')
+            }
+        }
+        
+    }, [user, id])
 
     return (
         <div>
-            <MemberEdit id={id} email={currentUser.email} />
+            <MemberEdit id={id} />
         </div>
     )
 }

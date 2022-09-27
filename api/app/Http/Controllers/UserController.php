@@ -17,14 +17,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($email = '')
     {
-        $check = false;
+
         if (Auth::check()) {
             $check = true;
         }
-        // $admin = Member::where('role', '=', 'admin')->get()->toArray();
-        $member = Member::where('role', '=', 'member')->get()->toArray();
+        $member = [];
+        if ($email == '') {
+            $member = Member::where('role', '=', 'member')->get()->toArray();
+        } else {
+            $member = Member::where('role', '=', 'member')->where('email', 'LIKE', '%' . $email . '%')->get()->toArray();
+        }
         // $members = array_merge($admin, $member);
         return response()->json([
             'success' => 'true',

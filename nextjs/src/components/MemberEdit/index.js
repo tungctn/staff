@@ -6,7 +6,7 @@ import 'antd/dist/antd.css'
 import { getMemberById, updateMember } from '../../api/member';
 import { AppContext } from '../../context/AppContext';
 import Navbar from '../Navbar'
-import { setAuthHeader } from '../../api/auth';
+import { getCurrentUser, setAuthHeader } from '../../api/auth';
 import axios from 'axios';
 import styled from 'styled-components'
 // import axios from '../../../api/axios';
@@ -22,7 +22,7 @@ const index = ({ id, email }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm()
     const [initInfo, setInitInfo] = useState({})
-    const [currentUser, setCurrentUser] = useState({ name: member.name })
+    const [currentUser, setCurrentUser] = useState({})
     const fileURL = useRef()
     const isVNPhoneMobile =
         /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
@@ -40,16 +40,20 @@ const index = ({ id, email }) => {
         if (response.member) {
             setMember(response.member[0])
         }
-
+        const isEdit = response.member[0].id === id
+        // console.log(isEdit);
+        // console.log(id);
+        // console.log(response.member[0].id);
+        if (!isEdit) {
+            // router.push('/403')  
+        }
     }
+
     useEffect(() => {
         if (id) {
             getMember()
-            if (email !== member.email) {
-                router.push('/403')
-            }
         }
-    }, [id, email])
+    }, [id])
 
     const openNotification = (type, message, description) => {
         notification[type]({
@@ -104,16 +108,6 @@ const index = ({ id, email }) => {
             console.error("fail", e);
         })
     }
-
-    // const handleSubmit = async () => {
-    //     const response = await updateMember(initInfo, id)
-    //     if (response.success === 'true') {
-    //         openNotification('success', "Update Successful")
-    //         setTimeout(() => router.push('/member'))
-    //     } else {
-    //         openNotification('error', 'Update Failed')
-    //     }
-    // }
 
     return (
         <div>
@@ -176,7 +170,7 @@ const index = ({ id, email }) => {
                             ]}
                         >
                             <Input type="text"
-                                defaultValue={member?.name}                            // onChange={(e) => setInitInfo({ ...initInfo, name: e.target.value })} 
+                                // onChange={(e) => setInitInfo({ ...initInfo, name: e.target.value })} 
                                 onChange={(e) => {
                                     setInitInfo({ ...initInfo, name: e.target.value })
                                 }}

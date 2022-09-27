@@ -4,7 +4,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../../context/AppContext';
 import MemberList from '../../components/MemberList'
 import Navbar from '../../components/Navbar'
+import SearchMember from '../../components/SearchMember'
 import { getCurrentUser, setAuthHeader } from '../../api/auth';
+import { Input } from 'antd'
+import { UserOutlined, SearchOutlined } from "@ant-design/icons";
 
 
 const index = () => {
@@ -16,12 +19,6 @@ const index = () => {
         }
 
     }, [])
-    // useEffect(() => {
-    //     // Router.reload()
-    //     for (let index = 0; index < 1; index++) {
-    //         Router.reload()
-    //     }
-    // }, [])
 
     return (
         <div>
@@ -32,7 +29,10 @@ const index = () => {
             }}>
                 <Navbar />
             </div>
+            {/* <Input /> */}
             <div style={{ marginTop: '100px', height: '1000px' }}>
+                {/* <SearchMember /> */}
+
                 <MemberList />
             </div>
 

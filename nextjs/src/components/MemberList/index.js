@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button } from 'antd';
+import { Table, Button, Input } from 'antd'
+import { UserOutlined, SearchOutlined } from "@ant-design/icons"
 import axios from '../../api/axios';
 import { getMember } from '../../api/member';
 import Router, { useRouter } from 'next/router';
@@ -10,22 +11,28 @@ const index = () => {
     const [member, setMember] = useState([])
 
     // const [id, setID] = useState(1)
+    const [filter, setFilter] = useState('')
 
     const router = useRouter()
 
     useEffect(() => {
         ListMember()
-    }, []);
+    }, [filter]);
 
     const ListMember = async () => {
         setAuthHeader(localStorage['token'])
-        const response = await getMember()
+        const response = await getMember(filter)
         console.log(response)
         setMember(response.member)
     }
 
     const viewMember = (id) => {
         router.push(`/member/${id}`)
+    }
+
+    const searchInput = (e) => {
+        console.log(e.target.value);
+        setFilter(e.target.value)
     }
 
     const columns = [
@@ -62,8 +69,6 @@ const index = () => {
     ];
 
     const data = member?.map((user, index) => {
-        // setID(user.id)
-        // let number = 0
 
         return {
             number: index + 1,
@@ -79,6 +84,12 @@ const index = () => {
 
     return (
         <div>
+            <Input
+                style={{ width: '30%', float: 'right', marginBottom: '10px' }}
+                size="large" placeholder="search"
+                prefix={<SearchOutlined />}
+                onChange={searchInput}
+            />
             <Table
                 pagination={{ position: ['bottomCenter'] }}
                 columns={columns}

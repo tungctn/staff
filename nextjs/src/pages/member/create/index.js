@@ -10,13 +10,15 @@ const index = () => {
     const { user } = useContext(AppContext)
     const router = useRouter()
     const [currentUser, setCurrentUser] = useState({})
-    useEffect(() => {
-        setCurrentUser(user)
-    }, [user])
+    // useEffect(() => {
+    //     if (user) {
+    //         setCurrentUser(user)
+    //     }
+    // }, [user])
 
     return (
         <div>
-            <MemberCreate role={currentUser.role} />
+            <MemberCreate role={user.role} />
         </div>
     )
 }
