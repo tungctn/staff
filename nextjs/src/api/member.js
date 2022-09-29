@@ -2,10 +2,10 @@
 import Router from "next/router"
 import axios from "./axios"
 
-export const getMember = async (email) => {
+export const getMember = async (input, filter) => {
     try {
 
-        const response = await axios.get(`/member${email ?? ''}`)
+        const response = await axios.get(`/member/${filter}/${input ?? ''}`)
         return response.data
     } catch (error) {
         return { success: 'false', message: error.message }

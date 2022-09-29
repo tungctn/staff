@@ -26,13 +26,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/email/{email}', [UserController::class, 'emailUnique']);
 Route::post('/{id}/upload-image', [UserController::class, 'upload']);
 Route::group(['middleware' => ["auth:sanctum"]], function () {
-    Route::get('/member{email?}', [UserController::class, 'index']);
+    Route::get('member/{filter}/{email?}', [UserController::class, 'index']);
     Route::get('/member/{id}', [UserController::class, 'show']);
     Route::post('/member/edit/{id}', [UserController::class, 'update']);
     Route::post('/member/create', [UserController::class, 'store']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::get('/logout', [AuthController::class, 'logout']);
-    Route::post('/changepassword/{id}',[UserController::class,'changePassword']);
+    Route::post('/changepassword/{id}', [UserController::class, 'changePassword']);
     Route::get('/phone/{phone}', [UserController::class, 'phoneUnique']);
     Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 });

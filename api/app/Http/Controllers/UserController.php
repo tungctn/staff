@@ -17,17 +17,17 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($email = '')
+    public function index($filter, $input = '')
     {
 
         if (Auth::check()) {
             $check = true;
         }
         $member = [];
-        if ($email == '') {
+        if ($input == '') {
             $member = Member::where('role', '=', 'member')->get()->toArray();
         } else {
-            $member = Member::where('role', '=', 'member')->where('email', 'LIKE', '%' . $email . '%')->get()->toArray();
+            $member = Member::where('role', '=', 'member')->where($filter, 'LIKE', '%' . $input . '%')->get()->toArray();
         }
         // $members = array_merge($admin, $member);
         return response()->json([
@@ -131,6 +131,7 @@ class UserController extends Controller
     {
         // $member = DB::table('members')->where('id', $id)->get();
         $user = DB::table('users')->where('id', $id)->get();
+        // $members = array_merge($user)
         // $image_path = "https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg";
 
         if (count($user) === 0) {
