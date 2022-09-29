@@ -224,7 +224,7 @@ class UserController extends Controller
     {
         $member = DB::table('members')->where('id', $id)->get();
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/restaurants');
+            $path = $request->file('image')->store('public/images');
             $image_path = env('APP_URL') . ':8000/' . 'storage/' . substr($path, strlen('public/'));
             DB::table('members')
                 ->where('id', $id)
