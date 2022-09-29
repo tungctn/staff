@@ -13,6 +13,15 @@ export const getMember = async (email) => {
 
 }
 
+export const changePassword = async (password, id) => {
+    try {
+        const response = await axios.post(`/changepassword/${id}`, password)
+        return response.data
+    } catch (error) {
+        return { success: 'false', message: error.message }
+    }
+}
+
 export const getMemberById = async (id) => {
     try {
         const response = await axios.get(`/member/${id}`)

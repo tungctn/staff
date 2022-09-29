@@ -1,9 +1,9 @@
 import Router, { useRouter } from 'next/router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Layout, Col, Row, Image, Form, Button, Input, Avatar, notification, Spin } from 'antd'
+import { Layout, Col, Row, Image, Form, Button, Input, Avatar, notification, Spin, Modal } from 'antd'
 import { AntDesignOutlined, EditOutlined, DeleteOutlined, CameraTwoTone } from '@ant-design/icons';
 import 'antd/dist/antd.css'
-import { getMemberById, updateMember } from '../../api/member';
+import { changePassword, getMemberById, updateMember } from '../../api/member';
 import { AppContext } from '../../context/AppContext';
 import Navbar from '../Navbar'
 import { getCurrentUser, setAuthHeader } from '../../api/auth';
@@ -11,9 +11,10 @@ import axios from 'axios';
 import styled from 'styled-components'
 // import axios from '../../../api/axios';
 
-const index = ({ id, email }) => {
+const index = ({ id }) => {
 
     // const { user, getUser, setUser } = useContext(AppContext)    
+    const { user } = useContext(AppContext)
     const router = useRouter()
     const [member, setMember] = useState({})
     // const [image, setImage] = useState('')
@@ -23,7 +24,10 @@ const index = ({ id, email }) => {
     const [form] = Form.useForm()
     const [initInfo, setInitInfo] = useState({})
     const [currentUser, setCurrentUser] = useState({})
+    const [isVisible, setIsVisible] = useState(false)
+    const [password, setPassword] = useState({})
     const fileURL = useRef()
+
     const isVNPhoneMobile =
         /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
     const getMember = async () => {
@@ -36,17 +40,15 @@ const index = ({ id, email }) => {
             address: response.member[0].address,
             role: response.member[0].role,
         })
-        console.log(response);
-        if (response.member) {
-            setMember(response.member[0])
-        }
-        const isEdit = response.member[0].id === id
-        // console.log(isEdit);
-        // console.log(id);
-        // console.log(response.member[0].id);
-        if (!isEdit) {
-            // router.push('/403')  
-        }
+        setInitInfo({
+            ...initInfo,
+            name: response.member[0].name,
+            email: response.member[0].email,
+            phone: response.member[0].phone,
+            address: response.member[0].address,
+            role: response.member[0].role,
+        })
+        setMember(response?.member[0])
     }
 
     useEffect(() => {
@@ -55,22 +57,18 @@ const index = ({ id, email }) => {
         }
     }, [id])
 
+    useEffect(() => {
+        if (Object.values(user).length !== 0) {
+            setCurrentUser(user)
+        }
+    }, [user])
+
     const openNotification = (type, message, description) => {
         notification[type]({
             message,
             description,
             duration: 3,
         })
-    }
-
-    const onFinish = async (value) => {
-        const response = await updateMember(value, id)
-        if (response.success === 'true') {
-            openNotification('success', "Update Successful")
-            setTimeout(() => router.push('/member'))
-        } else {
-            openNotification('error', 'Update Failed')
-        }
     }
 
     const handleClick = (e) => {
@@ -93,8 +91,6 @@ const index = ({ id, email }) => {
     }
     const submitData = (e) => {
         e.preventDefault()
-        // setImage(e[0])
-        // setIsSubmit(true)
         setIsLoading(false)
         const data = new FormData()
         data.append("image", image)
@@ -107,6 +103,28 @@ const index = ({ id, email }) => {
         }).catch((e) => {
             console.error("fail", e);
         })
+    }
+
+    const handleUpdate = async () => {
+        console.log(initInfo);
+        const response = await updateMember(initInfo, id)
+        if (response.success === 'true') {
+            openNotification('success', "Update Successful")
+            setTimeout(() => { router.push('/member') }, 2000)
+        } else {
+            openNotification('error', 'Update Failed')
+        }
+    }
+
+    const handleOk = async () => {
+        console.log(password.password);
+        const response = await changePassword(password, id)
+        if (response.success === 'true') {
+            openNotification('success', "Change Successful")
+            setTimeout(() => { router.push('/member') }, 2000)
+        } else {
+            openNotification('error', 'Change Failed')
+        }
     }
 
     return (
@@ -134,7 +152,7 @@ const index = ({ id, email }) => {
                                 preview={false}
                                 size={200}
                                 icon={<AntDesignOutlined />}
-                                src={member.image}
+                                src={member?.image}
                             // src='http://localhost:8000/storage/restaurants/V1EQbbAZ137clxYXunqlPw6rS5b1AsQd1tkDwdiz.jpg'
                             />
                             <CameraTwoTone
@@ -158,7 +176,7 @@ const index = ({ id, email }) => {
 
                     <Form
                         form={form}
-                        onFinish={onFinish}
+                    // onFinish={onFinish}
                     >
                         <Form.Item
                             name='name'
@@ -170,6 +188,7 @@ const index = ({ id, email }) => {
                             ]}
                         >
                             <Input type="text"
+                                defaultValue={member?.name}
                                 // onChange={(e) => setInitInfo({ ...initInfo, name: e.target.value })} 
                                 onChange={(e) => {
                                     setInitInfo({ ...initInfo, name: e.target.value })
@@ -188,56 +207,101 @@ const index = ({ id, email }) => {
                         >
                             <Input type="email" onChange={(e) => setInitInfo({ ...initInfo, email: e.target.value })} />
                         </Form.Item>
-                        <Form.Item
-                            name='phone'
-                            label="Phone"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                                () => ({
-                                    validator(_, value) {
-                                        if (isVNPhoneMobile.test(value) === false) {
-                                            return Promise.reject(
-                                                new Error('Phone is not type'),
-                                            )
-                                        }
-                                        return Promise.resolve()
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input type="text" onChange={(e) => setInitInfo({ ...initInfo, phone: e.target.value })} />
-                        </Form.Item>
-                        <Form.Item
-                            name='address'
-                            label="Address"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            <Input type="text" onChange={(e) => setInitInfo({ ...initInfo, address: e.target.value })} />
-                        </Form.Item>
-                        <Form.Item
-                            name='role'
-                            label="Role"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            <Input type="text" onChange={(e) => setInitInfo({ ...initInfo, role: e.target.value })} />
-                        </Form.Item>
-                        <Button htmlType='submit' type='primary' style={{
+                        {currentUser.role !== 'users' && (
+                            <div>
+                                <Form.Item
+                                    name='phone'
+                                    label="Phone"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                        () => ({
+                                            validator(_, value) {
+                                                if (isVNPhoneMobile.test(value) === false) {
+                                                    return Promise.reject(
+                                                        new Error('Phone is not type'),
+                                                    )
+                                                }
+                                                return Promise.resolve()
+                                            },
+                                        }),
+                                    ]}
+                                >
+                                    <Input type="text" onChange={(e) => setInitInfo({ ...initInfo, phone: e.target.value })} />
+                                </Form.Item>
+                                <Form.Item
+                                    name='address'
+                                    label="Address"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}
+                                >
+                                    <Input type="text" onChange={(e) => setInitInfo({ ...initInfo, address: e.target.value })} />
+                                </Form.Item>
+                            </div>
+                        )}
+
+                        <Button type='primary' style={{
                             float: 'right',
                             width: '120px',
                             height: '40px',
                             fontSize: '20px',
                             borderRadius: '10px'
-                        }}>Update</Button>
+                        }}
+                            // htmlType="submit"
+                            onClick={handleUpdate}
+                        >
+                            Update
+                        </Button>
+                        {/* {currentUser.id === Number(id) && console.log("true")} */}
+                        <div>
+                            <Button type='primary' style={{
+                                float: 'right',
+                                width: '200px',
+                                height: '40px',
+                                fontSize: '20px',
+                                borderRadius: '10px',
+                                marginRight: '10px'
+                            }}
+                                // htmlType="submit"
+                                onClick={() => setIsVisible(true)}
+                            >
+                                Change Password
+                            </Button>
+                            <Modal
+                                // width={400}
+                                centered={true}
+                                title="Change password"
+                                style={{
+                                    top: 20
+                                }}
+                                visible={isVisible}
+                                okText="Change"
+                                onOk={handleOk}
+                                onCancel={() => { setIsVisible(false) }}
+                            >
+                                <Form
+                                // onFinish={onFinish}
+                                >
+                                    <Form.Item
+                                        name='password'
+                                        label="New Password"
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
+                                    >
+                                        <Input.Password type="text" onChange={(e) => { setPassword({ password: e.target.value }) }} />
+                                    </Form.Item>
+                                </Form>
+
+                            </Modal>
+                        </div>
+
                     </Form>
 
 

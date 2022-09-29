@@ -15,10 +15,18 @@ const index = () => {
     const router = useRouter()
     const id = router.query.id
     const [currentUser, setCurrentUser] = useState({})
-    const isEdit = id == currentUser.id
+    const isEdit = Number(id) === currentUser.id
 
     useEffect(() => {
-        setCurrentUser(user)
+        if (Object.values(user).length !== 0) {
+            // if (Number(id) !== user.id) {
+            //     router.push('/403')
+            // }
+            if (Number(id) === user.id && user.role === 'users') {
+                router.push('/404')
+            }
+            setCurrentUser(user)
+        }
     }, [user])
 
     return (

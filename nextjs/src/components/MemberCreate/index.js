@@ -13,7 +13,7 @@ const index = ({ role }) => {
 
     // const { setIsLogin } = useContext(AppContext)
     const router = useRouter()
-    const [initValue, setInitValue] = useState({ name: '', email: '', phone: '', address: '', role: '' })
+    const [initValue, setInitValue] = useState({ name: '', email: '', phone: '', address: '', role: 'member' })
     const [image, setImage] = useState("https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg")
     const [imageUpload, setImageUpload] = useState("https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg")
     const [isLoading, setIsLoading] = useState(false)
@@ -192,7 +192,7 @@ const index = ({ role }) => {
                         >
                             <Input type="text" onChange={(e) => { setInitValue({ ...initValue, address: e.target.value }) }} />
                         </Form.Item>
-                        <Form.Item
+                        {/* <Form.Item
                             name='role'
                             label="Role"
                             rules={[
@@ -202,7 +202,7 @@ const index = ({ role }) => {
                             ]}
                         >
                             <Input type="text" onChange={(e) => { setInitValue({ ...initValue, role: e.target.value }) }} />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Button onClick={handleOk} type='primary' style={{
                             float: 'right', width: '120px',
                             height: '40px',

@@ -148,22 +148,22 @@ class UserController extends Controller
             ]);
         }
 
-        // if ($request->hasFile('image')) {
-        // $path = $request->file('image')->store('public/restaurants');
-        // $image_path = env('APP_URL') . ':8000/' . 'storage/' . substr($path, strlen('public/'));
-        // $image_path = "http://localhost:8000/storage/restaurants/4O6PoZfJlcnz2LRJGFa2wyBk4AMYYI0k6OvVbXoZ.jpg";
-        // } 
-        // return response()->json(['message' => 'good', 'link' => $image_path]);
-        // } else {
-        //     return response()->json(['message' => 'bad']);
-        // }
-
         DB::table('members')
             ->where('id', $id)
-            ->update(['email' => $request->email, 'name' => $request->name, 'phone' => $request->phone, 'address' => $request->address, 'role' => $request->role]);
+            ->update([
+                'email' => $request->email,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'role' => $request->role
+            ]);
         DB::table('users')
             ->where('id', $id)
-            ->update(['email' => $request->email, 'name' => $request->name, 'role' => $request->role]);
+            ->update([
+                'email' => $request->email,
+                'name' => $request->name,
+                'role' => $request->role
+            ]);
         $member = DB::table('members')->where('id', $id)->get();
         return response()->json([
             'success' => 'true',
@@ -233,5 +233,17 @@ class UserController extends Controller
         } else {
             return response()->json(['message' => 'bad']);
         }
+    }
+
+    public function changePassword(Request $request, $id)
+    {
+
+        DB::table('users')->where('id', $id)->update([
+            'password' => Hash::make($request->input('password'))
+        ]);
+        // $password = 
+        return response()->json([
+            'success' => 'true',
+        ]);
     }
 }

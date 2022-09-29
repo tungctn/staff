@@ -32,7 +32,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
     Route::post('/member/create', [UserController::class, 'store']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::get('/logout', [AuthController::class, 'logout']);
-
+    Route::post('/changepassword/{id}',[UserController::class,'changePassword']);
     Route::get('/phone/{phone}', [UserController::class, 'phoneUnique']);
     Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 });

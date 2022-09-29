@@ -7,7 +7,6 @@ const index = () => {
 
     return (
         <div>
-            {/* <Profile id={currentUser.id} /> */}
             <Profile />
         </div>
     )

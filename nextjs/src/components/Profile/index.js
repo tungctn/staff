@@ -70,7 +70,35 @@ const index = () => {
                         >
                             {currentUser.email}
                         </Form.Item>
-                        <Form.Item
+                        {currentUser.role !== 'users' && (
+                            <div>
+                                <Form.Item
+                                    label="Phone"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}
+                                >
+                                    {currentUser.phone}
+                                </Form.Item>
+                                <Form.Item
+                                    label="Address"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}
+                                >
+                                    {currentUser.address}
+                                </Form.Item>
+                            </div>
+
+                        )
+                        }
+
+
+                        {/* <Form.Item
                             name={['user', 'email']}
                             label="Phone"
                             rules={[
@@ -91,7 +119,7 @@ const index = () => {
                             ]}
                         >
                             {currentUser.address}
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item
                             name={['user', 'age']}
                             label="Role"
