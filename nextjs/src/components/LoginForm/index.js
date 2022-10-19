@@ -53,10 +53,10 @@ const index = () => {
         openNotification('error', 'Login failed')
     };
     return (
-        <div className='bg'>
+        <div className='bg' >
 
             <Row type='flex' justify='center' align='middle' style={{ minHeight: '100vh' }}>
-                <Col>
+                <Col style={{ border: '1px solid #ccc', padding: '0 10px', backgroundColor: 'white' }}>
                     <Image
                         preview={false}
                         width={400}

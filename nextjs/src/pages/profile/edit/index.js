@@ -12,6 +12,7 @@ const index = () => {
             setAuthHeader(localStorage['token'])
             const response = await getCurrentUser()
             setCurrentUser(response.data[0])
+            console.log(response);
         }
     }
     useEffect(() => {

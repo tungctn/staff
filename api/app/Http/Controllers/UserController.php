@@ -96,7 +96,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = Member::where('id', '=', $id)->get()->toArray();
+        $user = DB::table('members')->where('id', '=', $id)->get()->toArray();
         if (!count($user)) {
             return response()->json([
                 'success' => 'false',

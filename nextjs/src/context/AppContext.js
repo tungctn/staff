@@ -39,14 +39,9 @@ const AppContextProvider = ({ children }) => {
         }
     }
     const handleLogout = async () => {
-        // dispatch({
-        //     type: SET_AUTH_BEGIN
-        // })
         const responseData = await logoutAPI()
 
         localStorage.removeItem('token')
-        // Router.reload()
-        // router.
         router.push('/login')
         openNotification('success', responseData.msg)
     }
@@ -62,11 +57,12 @@ const AppContextProvider = ({ children }) => {
 
     const getUser = async () => {
         if (localStorage['token']) {
-            setAuthHeader(localStorage['token'])
+            // setAuthHeader(localStorage['token'])
             const response = await getCurrentUser()
-            // if (response.data) {
-            setUser(response.data[0])
-            // }
+            if (response.data) {
+                setUser(response.data[0])
+            }
+
             console.log(response);
         }
     }

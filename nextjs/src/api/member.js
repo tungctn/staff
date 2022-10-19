@@ -5,7 +5,7 @@ import axios from "./axios"
 export const getMember = async (input, filter) => {
     try {
 
-        const response = await axios.get(`/member/${filter}/${input ?? ''}`)
+        const response = await axios.get(`/member/list/${filter}/${input ?? ''}`)
         return response.data
     } catch (error) {
         return { success: 'false', message: error.message }

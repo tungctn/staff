@@ -16,7 +16,7 @@ const index = () => {
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
-        if (user) {
+        if (Object.values(user).length !== 0) {
             setCurrentUser(user)
         }
     }, [user])

@@ -30,9 +30,7 @@ const index = () => {
                 <Navbar />
             </div>
             {/* <Input /> */}
-            <div style={{ marginTop: '100px', height: '1000px' }}>
-                {/* <SearchMember /> */}
-
+            <div style={{ margin: '100px auto', height: '1000px', width: '90%' }}>
                 <MemberList />
             </div>
 

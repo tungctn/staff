@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Select, Button, Popover, Row, Col } from 'antd'
+import { Table, Input, Select, Button, Popover, Row, Col, Card } from 'antd'
 import 'antd/dist/antd.css'
 import { UserOutlined, SearchOutlined, FilterOutlined } from "@ant-design/icons"
 import axios from '../../api/axios';
 import { getMember } from '../../api/member';
 import Router, { useRouter } from 'next/router';
 import { setAuthHeader } from '../../api/auth';
+import style from './index.module.css'
 
 // const data = []
 
@@ -30,6 +31,7 @@ const index = () => {
     const [select, setSelect] = useState(10)
     const [visible, setVisible] = useState(false)
     const [chooseFilter, setChooseFilter] = useState('email')
+    const [bgColor, setBgColor] = useState('#bae8e8')
     const router = useRouter()
 
     useEffect(() => {
@@ -113,7 +115,6 @@ const index = () => {
             address: user.address,
             role: user.role,
             key: user.id,
-
         }
     })
 
@@ -181,9 +182,11 @@ const index = () => {
 
                     </Popover>
                 </Col>
-                <Col span={7}>
+                <Col
+                    span={6}>
                     <Input
-                        style={{ marginLeft: '20px' }}
+                        className={style.input}
+                        // style={{ margin: '0 20px' }}
                         size="large" placeholder="search"
                         prefix={<SearchOutlined />}
                         onChange={searchInput}
@@ -192,16 +195,19 @@ const index = () => {
             </Row>
 
 
-
-            <Table
-                pagination={pagination}
-                columns={columns}
-                dataSource={data}
-                onRow={(r) => ({
-                    onClick: () => { viewMember(r.key) }
-                })}
-            />
-
+            <Card
+                bordered={true}
+                style={{ boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', marginTop: '20px' }}
+            >
+                <Table
+                    pagination={pagination}
+                    columns={columns}
+                    dataSource={data}
+                    onRow={(r) => ({
+                        onClick: () => { viewMember(r.key) }
+                    })}
+                />
+            </Card>
         </div>
     )
 }
