@@ -14,6 +14,11 @@ const AppContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({})
 
+    useEffect(() => {
+        getUser()
+        setAuthHeader(localStorage['token'])
+    }, [])
+
     const openNotification = (type, message, description) => {
         notification[type]({
             message,
@@ -30,10 +35,8 @@ const AppContextProvider = ({ children }) => {
             localStorage.setItem('token', response.token)
             setAuthHeader(localStorage['token'])
             openNotification('success', 'Login successful')
-            // openNotification('error', 'Login failed')
             getUser()
             router.push('/member')
-            // Router.reload()
         } else {
             openNotification('error', 'Login failed')
         }
@@ -47,26 +50,15 @@ const AppContextProvider = ({ children }) => {
     }
 
 
-    // console.log("context: ", authState);
-    // console.log("context: ", localStorage['token']);
-
-    useEffect(() => {
-        getUser()
-        setAuthHeader(localStorage['token'])
-    }, [])
 
     const getUser = async () => {
         if (localStorage['token']) {
-            // setAuthHeader(localStorage['token'])
             const response = await getCurrentUser()
             if (response.data) {
                 setUser(response.data[0])
             }
-
-            console.log(response);
         }
     }
-    console.log(user);
 
     const data = {
         user,

@@ -8,13 +8,6 @@ import { AppContext } from '../../../context/AppContext'
 const index = () => {
 
     const { user } = useContext(AppContext)
-    const router = useRouter()
-    const [currentUser, setCurrentUser] = useState({})
-    // useEffect(() => {
-    //     if (user) {
-    //         setCurrentUser(user)
-    //     }
-    // }, [user])
 
     return (
         <div>

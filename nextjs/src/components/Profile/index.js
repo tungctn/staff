@@ -7,19 +7,22 @@ import { getMemberById } from '../../api/member';
 import { AppContext } from '../../context/AppContext';
 import Navbar from '../Navbar'
 import { getCurrentUser, setAuthHeader } from '../../api/auth';
-// import axios from '../../../api/axios';
 
 const index = () => {
 
-    const { user } = useContext(AppContext)
+    // const { user } = useContext(AppContext)
     const router = useRouter()
     const [currentUser, setCurrentUser] = useState({})
-
-    useEffect(() => {
-        if (Object.values(user).length !== 0) {
-            setCurrentUser(user)
+    const getUser = async () => {
+        if (localStorage['token']) {
+            setAuthHeader(localStorage['token'])
+            const response = await getCurrentUser()
+            setCurrentUser(response.data[0])
         }
-    }, [user])
+    }
+    useEffect(() => {
+        getUser()
+    }, [])
 
     return (
         <div>
@@ -97,29 +100,6 @@ const index = () => {
                         )
                         }
 
-
-                        {/* <Form.Item
-                            name={['user', 'email']}
-                            label="Phone"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            {currentUser.phone}
-                        </Form.Item>
-                        <Form.Item
-                            name={['user', 'age']}
-                            label="Address"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            {currentUser.address}
-                        </Form.Item> */}
                         <Form.Item
                             name={['user', 'age']}
                             label="Role"

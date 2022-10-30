@@ -9,9 +9,6 @@ function Page() {
     const router = useRouter()
 
     useEffect(() => {
-        // setTimeout(() => {
-        //     router.push('/login', undefined, { shallow: true })
-        // }, 3000)
         setTimeout(() => {
             if (localStorage['token']) {
                 router.push('/member')

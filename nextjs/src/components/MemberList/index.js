@@ -7,42 +7,24 @@ import { getMember } from '../../api/member';
 import Router, { useRouter } from 'next/router';
 import { setAuthHeader } from '../../api/auth';
 import style from './index.module.css'
-
-// const data = []
-
-// for (let i = 0; i < 46; i++) {
-//     data.push({
-//         key: i,
-//         name: `Edward King ${i}`,
-//         age: 32,
-//         address: `London, Park Lane no. ${i}`
-//     });
-// }
-
-
+import moment from 'moment'
 
 const index = () => {
 
     const { Option } = Select
     const [member, setMember] = useState([])
-
-    // const [id, setID] = useState(1)
     const [filter, setFilter] = useState('')
-    const [select, setSelect] = useState(10)
     const [visible, setVisible] = useState(false)
     const [chooseFilter, setChooseFilter] = useState('email')
-    const [bgColor, setBgColor] = useState('#bae8e8')
     const router = useRouter()
 
     useEffect(() => {
         ListMember()
-        console.log(chooseFilter);
     }, [filter, chooseFilter]);
 
     const ListMember = async () => {
         setAuthHeader(localStorage['token'])
         const response = await getMember(filter, chooseFilter)
-        console.log(response)
         setMember(response.member)
     }
 
@@ -51,7 +33,6 @@ const index = () => {
     }
 
     const searchInput = (e) => {
-        console.log(e.target.value);
         setFilter(e.target.value)
     }
 
@@ -68,8 +49,7 @@ const index = () => {
     }
 
     const handleOpenChange = (newOpen) => {
-        setVisible(newOpen);
-        console.log(newOpen);
+        setVisible(newOpen)
     };
 
     const columns = [
@@ -103,6 +83,11 @@ const index = () => {
             dataIndex: 'role',
             key: 'role',
         },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+        }
     ];
 
     const data = member?.map((user, index) => {
@@ -114,6 +99,7 @@ const index = () => {
             phone: user.phone,
             address: user.address,
             role: user.role,
+            date: moment(user.created_at).format('YYYY/MM/DD'),
             key: user.id,
         }
     })
@@ -186,7 +172,6 @@ const index = () => {
                     span={6}>
                     <Input
                         className={style.input}
-                        // style={{ margin: '0 20px' }}
                         size="large" placeholder="search"
                         prefix={<SearchOutlined />}
                         onChange={searchInput}
@@ -212,15 +197,5 @@ const index = () => {
     )
 }
 
-// const index = () => {
-
-//     return (
-//         <div>
-//             <Table
-//                 columns={columns}
-//                 dataSource={data} />
-//         </div>
-//     );
-// }
 
 export default index

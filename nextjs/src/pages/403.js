@@ -7,7 +7,6 @@ import { AppContext } from '../context/AppContext'
 const error = () => {
 
     const router = useRouter()
-    const [getCurrentUser] = useContext(AppContext)
 
     useEffect(() => {
         setTimeout(() => {

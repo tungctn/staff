@@ -5,14 +5,12 @@ import { getCurrentUser, setAuthHeader } from '../../../api/auth'
 
 const index = () => {
 
-    const router = useRouter()
     const [currentUser, setCurrentUser] = useState({})
     const getUser = async () => {
         if (localStorage['token']) {
             setAuthHeader(localStorage['token'])
             const response = await getCurrentUser()
             setCurrentUser(response.data[0])
-            console.log(response);
         }
     }
     useEffect(() => {

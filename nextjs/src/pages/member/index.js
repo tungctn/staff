@@ -27,9 +27,8 @@ const index = () => {
                 position: 'sticky',
                 zIndex: '1'
             }}>
-                <Navbar />
+                <Navbar value={1000} value2={2000} />
             </div>
-            {/* <Input /> */}
             <div style={{ margin: '100px auto', height: '1000px', width: '90%' }}>
                 <MemberList />
             </div>

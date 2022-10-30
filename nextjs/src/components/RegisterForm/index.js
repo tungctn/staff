@@ -1,47 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
 import { Row, Image, Button, Form, Col, Input, Checkbox, notification, Spin } from "antd"
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/router';
-import { APIRegister, checkEmail, checkLogin, setAuthHeader } from '../../api/auth';
-import { AppContext } from '../../context/AppContext';
-import { useForm } from 'antd/lib/form/Form';
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { APIRegister, checkEmail, checkLogin, setAuthHeader } from '../../api/auth'
+import { AppContext } from '../../context/AppContext'
+import { useForm } from 'antd/lib/form/Form'
 
 // import './style.css'
 
 
 const index = () => {
 
-    // const { isLogin, setIsLogin } = useContext(AppContext)
-
     const [isLoading, setIsLoading] = useState(false)
-
-    const [isSuccess, setIsSuccess] = useState(false)
-
-    const [email, setEmail] = useState('')
-
-    const router = useRouter()
 
     const [form] = Form.useForm()
 
     const [initValue, setInitValue] = useState({ name: '', email: '', password: '' })
 
-    const openNotification = (type, message, description) => {
-        notification[type]({
-            message,
-            description,
-            duration: 3,
-        })
-    }
-
-    // useEffect(() => {
-    //     if (isLogin) {
-    //         // setIsLoading(true)
-    //         setTimeout(() => {
-    //             router.push('/home')
-    //         }, 3000)
-    //     }
-    // }, [isLogin])
+    const { openNotification } = useContext(AppContext)
 
     useEffect(() => {
         setTimeout(() => {
@@ -51,7 +28,6 @@ const index = () => {
 
     const checkError = async (email) => {
         let isError = false
-        // setAuthHeader(localStorage['token'])
         const response = await checkEmail(email)
         if (response.success === 'false') {
             form.setFields([
@@ -65,23 +41,9 @@ const index = () => {
         return isError
     }
 
-    // const onBlur = (params) => {
-    //     checkError(params)
-    // }
-
     const onBlur = () => {
         checkError(initValue.email)
     }
-
-    const onFinish = async (values) => {
-        const isError = await checkError(values.email)
-        if (!isError) {
-            setIsLoading(true)
-            await APIRegister(values)
-            setIsSuccess(true)
-            openNotification('success', 'Register successful')
-        }
-    };
 
     const handleOk = async () => {
         const isError = await checkError(initValue.email)
@@ -89,16 +51,9 @@ const index = () => {
             setIsLoading(true)
             await APIRegister(initValue)
             console.log(APIRegister({ name: 'tung', email: 'tung1@gmail.com', password: 'tung' }).then((res) => { console.log(res.data) }))
-            setIsSuccess(true)
             openNotification('success', 'Register successful')
         }
     }
-
-    const onFinishFailed = (errorInfo) => {
-        // setIsLoading(true)
-        // setIsLogin(false)
-        // openNotification('error', 'Login failed')
-    };
 
 
     return (
@@ -126,9 +81,6 @@ const index = () => {
                             wrapperCol={{
                                 span: 24,
                             }}
-                        // onFinish={onFinish}
-                        // onFinishFailed={onFinishFailed}
-                        // onFieldsChange={onFieldsChange}
                         >
                             <Form.Item
                                 label='Name'
@@ -158,22 +110,10 @@ const index = () => {
                                 <Input.Password prefix={<LockOutlined />} placeholder='Password' onChange={(e) => setInitValue({ ...initValue, password: e.target.value })} />
                             </Form.Item>
 
-                            {/* <Form.Item
-                                label='Confirm passwword'
-                                name='rePassword'
-                                rules={[{ required: true, message: 'Please confirm your password' }]}
-                            >
-                                <Input.Password prefix={<LockOutlined />} placeholder='Password' />
-                            </Form.Item> */}
-
                             <Form.Item>
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
-
-                                {/* <a style={{ float: 'right' }} href="">
-                                    Forgot password
-                                </a> */}
                             </Form.Item>
 
                             <Form.Item>
@@ -182,7 +122,6 @@ const index = () => {
                                 </Button>
                                 You have an account? <a href='./login'>Login now!</a>
                             </Form.Item>
-                            {/* {isSuccess && <h3>Success!</h3>} */}
                         </Form>
                     </Spin>
 

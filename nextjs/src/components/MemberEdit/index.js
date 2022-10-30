@@ -1,25 +1,21 @@
 import Router, { useRouter } from 'next/router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Layout, Col, Row, Image, Form, Button, Input, Avatar, notification, Spin, Modal } from 'antd'
-import { AntDesignOutlined, EditOutlined, DeleteOutlined, CameraTwoTone } from '@ant-design/icons';
+import { AntDesignOutlined, EditOutlined, DeleteOutlined, CameraTwoTone } from '@ant-design/icons'
 import 'antd/dist/antd.css'
-import { changePassword, getMemberById, updateMember } from '../../api/member';
-import { AppContext } from '../../context/AppContext';
+import { changePassword, getMemberById, updateMember } from '../../api/member'
+import { AppContext } from '../../context/AppContext'
 import Navbar from '../Navbar'
-import { getCurrentUser, setAuthHeader } from '../../api/auth';
-import axios from 'axios';
+import { getCurrentUser, setAuthHeader } from '../../api/auth'
+import axios from 'axios'
 import styled from 'styled-components'
-// import axios from '../../../api/axios';
 
 const index = ({ id }) => {
 
-    // const { user, getUser, setUser } = useContext(AppContext)    
     const { user } = useContext(AppContext)
     const router = useRouter()
     const [member, setMember] = useState({})
-    // const [image, setImage] = useState('')
-    const [image, setImage] = useState("https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg")
-    const [imageUpload, setImageUpload] = useState("https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg")
+    const [image, setImage] = useState("https://www.imggroup.com.vn/Content/images/logo-img.png")
     const [isLoadingImage, setisLoadingImage] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm()
@@ -30,7 +26,7 @@ const index = ({ id }) => {
     const fileURL = useRef()
 
     const isVNPhoneMobile =
-        /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
+        /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/
     const getMember = async () => {
         setAuthHeader(localStorage['token'])
         const response = await getMemberById(id)
@@ -73,7 +69,6 @@ const index = ({ id }) => {
     }
 
     const handleClick = (e) => {
-        // console.log(e.target.files[0]);
         e.preventDefault()
         if (fileURL.current.value !== null) {
             fileURL.current.value = ''
@@ -85,10 +80,7 @@ const index = ({ id }) => {
 
     const handleChange = (file) => {
         setisLoadingImage(true)
-        console.log(file[0]);
-        setImage(file[0]);
-        setImageUpload(URL.createObjectURL(file[0]))
-        console.log(image);
+        setImage(file[0])
     }
     const submitData = (e) => {
         e.preventDefault()
@@ -96,7 +88,6 @@ const index = ({ id }) => {
         const data = new FormData()
         data.append("image", image)
         axios.post(`http://127.0.0.1:8000/api/${id}/upload-image`, data).then((res) => {
-            console.log(res.data)
             if (res.data.message === 'good') {
                 setIsLoading(true)
                 setTimeout(() => {
@@ -108,12 +99,11 @@ const index = ({ id }) => {
             }
 
         }).catch((e) => {
-            console.error("fail", e);
+            openNotification('error', 'Upload image failed')
         })
     }
 
     const handleUpdate = async () => {
-        console.log(initInfo);
         const response = await updateMember(initInfo, id)
         if (response.success === 'true') {
             openNotification('success', "Update Successful")
@@ -124,7 +114,6 @@ const index = ({ id }) => {
     }
 
     const handleOk = async () => {
-        console.log(password.password);
         const response = await changePassword(password, id)
         if (response.success === 'true') {
             openNotification('success', "Change Successful")
@@ -148,7 +137,7 @@ const index = ({ id }) => {
                             type="file"
                             style={{ display: 'none' }}
                             ref={fileURL}
-                            accept="image/*"
+                            accept=".png, .jpg"
                             onChange={(e) => handleChange(e.target.files)}
                         />
                         <Spin

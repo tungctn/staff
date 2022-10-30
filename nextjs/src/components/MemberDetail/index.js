@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { Layout, Col, Row, Image, Form, Button, Input, Avatar } from 'antd'
-import { AntDesignOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { AntDesignOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import 'antd/dist/antd.css'
-import { deleteMember, getMemberById } from '../../api/member';
-import { AppContext } from '../../context/AppContext';
+import { deleteMember, getMemberById } from '../../api/member'
+import { AppContext } from '../../context/AppContext'
 import Navbar from '../Navbar'
-import { setAuthHeader } from '../../api/auth';
-// import axios from '../../../api/axios';
+import { setAuthHeader } from '../../api/auth'
+// import axios from '../../../api/axios'
 
 const index = ({ id, role, isEdit }) => {
 
@@ -15,7 +15,6 @@ const index = ({ id, role, isEdit }) => {
     const router = useRouter()
     const [member, setMember] = useState({})
     const { openNotification } = useContext(AppContext)
-    const [image, setImage] = useState("https://hihisex.biz/wp-content/uploads/2022/07/nu-phat-thanh-vien-dam-duc-len-lut-dit-nhau-cung-anh-quay-phim-e1659111772297-400x300.jpg")
 
 
     useEffect(() => {
@@ -40,8 +39,6 @@ const index = ({ id, role, isEdit }) => {
         } else {
             openNotification('success', 'Delete failed')
         }
-
-        console.log(response);
     }
 
     return (

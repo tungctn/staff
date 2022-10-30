@@ -4,16 +4,23 @@ import { AppContext } from '../../context/AppContext'
 
 const index = () => {
 
-    const { getUser, setUser } = useContext(AppContext)
+    const { setUser } = useContext(AppContext)
 
     useEffect(() => {
-        console.log(localStorage);
-        console.log(getUser());
         setUser({})
     }, [])
     return (
-        <div style={{ backgroundColor: 'red' }}>
-            <LoginForm />
+        <div>
+            <div style=
+                {{
+                    opacity: 0.85,
+                    transition: 'linear 0.8s'
+                }}
+
+            >
+                <LoginForm />
+            </div>
+
         </div>
     )
 }

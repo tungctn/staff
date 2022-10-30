@@ -3,7 +3,7 @@
 const path = require('path')
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   basePath: '/src',
   // compilerOptions: {

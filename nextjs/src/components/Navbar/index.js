@@ -1,25 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react';
-import 'antd/dist/antd.css';
-import { ContactsFilled, UserOutlined, DownOutlined, SmileOutlined } from '@ant-design/icons';
-import { Menu, Avatar, Dropdown, Space, Row, Col, Image, Spin } from 'antd';
-import Router, { useRouter } from 'next/router';
-import { getCurrentUser, setAuthHeader } from '../../api/auth';
-import { AppContext } from '../../context/AppContext';
+import React, { useContext, useEffect, useState } from 'react'
+import 'antd/dist/antd.css'
+import { ContactsFilled, UserOutlined, DownOutlined, SmileOutlined } from '@ant-design/icons'
+import { Menu, Avatar, Dropdown, Space, Row, Col, Image, Spin } from 'antd'
+import Router, { useRouter } from 'next/router'
+import { AppContext } from '../../context/AppContext'
 
 
-const index = () => {
+const index = (props) => {
 
-    const [isLoading, setIsLoading] = useState(true)
     const { handleLogout } = useContext(AppContext)
     const { user } = useContext(AppContext)
-    // const router = useRouter()
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
-        if (user) {
+        if (Object.values(user).length !== 0) {
             setCurrentUser(user)
         }
     }, [user])
+
     const userInformations = (
         <Menu
             items={[
@@ -43,6 +41,7 @@ const index = () => {
 
     return (
         <Row style={{ backgroundColor: '#e3f6f5', height: '76px' }}>
+
             <Col span={1}></Col>
             <Col span={3} className='center' style={{ lineHeight: '76px' }}>
                 <Image
@@ -52,10 +51,6 @@ const index = () => {
                     height={40}
                     onClick={() => { router.push('/member') }}
                 />
-                {/* <Image
-                    width={200}
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                /> */}
             </Col>
             <Col span={16}>
                 {currentUser.role === 'admin' &&

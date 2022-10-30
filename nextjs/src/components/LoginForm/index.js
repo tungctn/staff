@@ -1,36 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
 import { Row, Image, Button, Form, Col, Input, Checkbox, notification, Spin } from "antd"
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/router';
-import { checkAuth, checkLogin, setAuthHeader } from '../../api/auth';
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { AppContext } from '../../context/AppContext'
-
-// import './style.css'
 
 
 const index = () => {
 
-    // const { isLogin, setIsLogin, dispatch, state } = useContext(AppContext)
-    // const { isLogin, setIsLogin, handleLogin, dispatch, state } = useContext(AppContext)
-    // const [isLogin, setIsLogin] = useState(isLogin)
-    // const { authState, loadUser, login } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState(false)
 
-    const router = useRouter()
-
-    const [isLogin, setIsLogin] = useState(false)
-
-    const openNotification = (type, message, description) => {
-        notification[type]({
-            message,
-            description,
-            duration: 3,
-        })
-    }
-
     const { handleLogin } = useContext(AppContext)
-
 
     useEffect(() => {
         localStorage.removeItem('token')
@@ -45,13 +24,8 @@ const index = () => {
     const onFinish = async (loginFormData) => {
         setIsLoading(true)
         await handleLogin(loginFormData)
-    };
+    }
 
-    const onFinishFailed = (errorInfo) => {
-        setIsLoading(true)
-        setIsLogin(false)
-        openNotification('error', 'Login failed')
-    };
     return (
         <div className='bg' >
 
@@ -78,7 +52,6 @@ const index = () => {
                                 span: 24,
                             }}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
                         >
                             <Form.Item
                                 label='Email'

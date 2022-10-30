@@ -20,7 +20,8 @@ class Member extends Migration
             $table->string('phone');
             $table->string('address');
             $table->string('image');
-            $table->string('role');
+            $table->unsignedBigInteger('role');
+            $table->foreign('role')->references('id')->on('role');
             $table->rememberToken();
             $table->timestamps();
         });
