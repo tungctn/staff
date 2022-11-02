@@ -7,21 +7,18 @@ import { useParams } from 'react-router-dom'
 
 const index = () => {
 
-    const { user } = useContext(AppContext)
     const router = useRouter()
     const id = router.query.id
+    const [currentUser, setCurrentUser] = useState({})
+    const { getUser } = useContext(AppContext)
 
     useEffect(() => {
-        if (Object.values(user).length !== 0 && id) {
-            if (Number(id) !== user.id) {
-                router.push('/403')
-            }
-            if (Number(id) === user.id && user.role === 'users') {
-                router.push('/404')
-            }
-        }
-        
-    }, [user, id])
+        (async () => {
+            await getUser().then((res) => {
+                setCurrentUser(res)
+            })
+        })()
+    }, [])
 
     return (
         <div>

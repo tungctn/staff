@@ -3,11 +3,7 @@ import { message, notification } from 'antd'
 import { checkAuth, checkLogin, getCurrentUser, logoutAPI, setAuthHeader } from '../api/auth'
 import Router, { useRouter } from 'next/router'
 
-
-
-
 export const AppContext = createContext()
-
 
 
 const AppContextProvider = ({ children }) => {
@@ -15,7 +11,6 @@ const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState({})
 
     useEffect(() => {
-        getUser()
         setAuthHeader(localStorage['token'])
     }, [])
 
@@ -30,12 +25,10 @@ const AppContextProvider = ({ children }) => {
 
     const handleLogin = async (loginFormData) => {
         const response = await checkLogin(loginFormData)
-        console.log(response);
         if (response.status === 1) {
             localStorage.setItem('token', response.token)
             setAuthHeader(localStorage['token'])
             openNotification('success', 'Login successful')
-            getUser()
             router.push('/member')
         } else {
             openNotification('error', 'Login failed')
@@ -43,7 +36,6 @@ const AppContextProvider = ({ children }) => {
     }
     const handleLogout = async () => {
         const responseData = await logoutAPI()
-
         localStorage.removeItem('token')
         router.push('/login')
         openNotification('success', responseData.msg)
@@ -52,12 +44,9 @@ const AppContextProvider = ({ children }) => {
 
 
     const getUser = async () => {
-        if (localStorage['token']) {
-            const response = await getCurrentUser()
-            if (response.data) {
-                setUser(response.data[0])
-            }
-        }
+        setAuthHeader(localStorage['token'])
+        const response = await getCurrentUser()
+        return response.data[0]
     }
 
     const data = {

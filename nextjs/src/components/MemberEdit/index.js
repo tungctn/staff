@@ -12,7 +12,7 @@ import styled from 'styled-components'
 
 const index = ({ id }) => {
 
-    const { user } = useContext(AppContext)
+    const { user, getUser } = useContext(AppContext)
     const router = useRouter()
     const [member, setMember] = useState({})
     const [image, setImage] = useState("https://www.imggroup.com.vn/Content/images/logo-img.png")
@@ -55,10 +55,12 @@ const index = ({ id }) => {
     }, [id])
 
     useEffect(() => {
-        if (Object.values(user).length !== 0) {
-            setCurrentUser(user)
-        }
-    }, [user])
+        (async () => {
+            await getUser().then((res) => {
+                setCurrentUser(res)
+            })
+        })()
+    }, [])
 
     const openNotification = (type, message, description) => {
         notification[type]({

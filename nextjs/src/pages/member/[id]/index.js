@@ -10,20 +10,23 @@ import { AppContext } from '../../../context/AppContext'
 
 const index = () => {
 
-    const { user } = useContext(AppContext)
+    const { user, getUser } = useContext(AppContext)
     const router = useRouter()
     const id = router.query.id
     const [currentUser, setCurrentUser] = useState({})
     const isEdit = Number(id) === currentUser.id
 
+
     useEffect(() => {
-        if (Object.values(user).length !== 0) {
-            if (Number(id) === user.id && user.role === 'users') {
-                router.push('/404')
-            }
-            setCurrentUser(user)
-        }
-    }, [user])
+        (async () => {
+            await getUser().then((res) => {
+                setCurrentUser(res)
+                if (Number(id) === currentUser.id && currentUser.role === 'users') {
+                    router.push('/404')
+                }
+            })
+        })()
+    }, [])
 
     return (
         <div>

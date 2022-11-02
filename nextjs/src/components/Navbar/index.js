@@ -8,15 +8,17 @@ import { AppContext } from '../../context/AppContext'
 
 const index = (props) => {
 
-    const { handleLogout } = useContext(AppContext)
+    const { handleLogout, getUser } = useContext(AppContext)
     const { user } = useContext(AppContext)
     const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
-        if (Object.values(user).length !== 0) {
-            setCurrentUser(user)
-        }
-    }, [user])
+        (async () => {
+            await getUser().then((res) => {
+                setCurrentUser(res)
+            })
+        })()
+    }, [])
 
     const userInformations = (
         <Menu
