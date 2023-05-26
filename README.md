@@ -35,15 +35,27 @@ Then, you can follow these steps to install and run your application:
 
 2. Navigate to the nextjs folder containing the repository source code: cd nextjs
 
-3. Install dependencies by running the command: npm install
+3. Install dependencies by running the command: 
+  ```
+  npm install
+  ```
 
-4. Run the folder by running the command: npm start
-
+4. Run the folder by running the command: 
+  ```
+  npm start
+```
+  
 5. Navigate to the server folder containing the repository source code: cd server
 
-6. Install dependencies by running the command: composer install
+6. Install dependencies by running the command: 
+  ```
+  composer install
+  ```
 
-7. Run the folder by running the command: php artisan serve
+7. Run the folder by running the command: 
+  ```
+  php artisan serve
+  ```
 
 8. Access your web application at: http://localhost:3000
 
